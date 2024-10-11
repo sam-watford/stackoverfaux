@@ -9,9 +9,9 @@ import {
   Collapse,
   Divider,
 } from "@mui/material";
-import parse from "html-react-parser";
 import Commentor from "./Commentor";
 import CommentAddForm from "./CommentAddForm";
+import { transformBodyWithNoReferrer } from "../utils/helpers";
 
 const CommentList = ({ comments, questionId, answerId }) => {
   const [expanded, setExpanded] = useState(false);
@@ -57,7 +57,7 @@ const CommentList = ({ comments, questionId, answerId }) => {
                   >
                     <Box sx={{ flex: 1 }}>
                       <Typography variant="body2">
-                        {parse(comment.body)}
+                        {transformBodyWithNoReferrer(comment.body)}
                       </Typography>
                       <Divider sx={{ width: "100%", my: 1 }} />
                     </Box>

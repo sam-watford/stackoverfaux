@@ -11,9 +11,9 @@ import {
   Divider,
 } from "@mui/material";
 import Answer from "../Answer";
-import parse from "html-react-parser";
 import Commentor from "../Commentor";
 import CommentList from "../CommentList";
+import { transformBodyWithNoReferrer } from "../../utils/helpers";
 
 const Question = () => {
   const { id } = useParams();
@@ -46,7 +46,7 @@ const Question = () => {
               {question.title}
             </Typography>
 
-            <div>{parse(question.body)}</div>
+            <div>{transformBodyWithNoReferrer(question.body)}</div>
 
             <Commentor comment={question} type={"question"} />
 
