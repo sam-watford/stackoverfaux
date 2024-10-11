@@ -141,22 +141,22 @@ Once the environment is set up, you can start the application using Docker Compo
 
 Here are some potential areas for improvement and future enhancements:
 
-1. Pagination for Efficiency:
+1. User Profile Management:
+
+   - Currently, the user management system is minimal. Adding user profile pages with editable details (e.g., email, bio, password) could enhance the user experience.
+
+2. Pagination for Efficiency:
 
    - Currently, the API returns all results (questions, answers, comments) in one go, which can be inefficient for large datasets. Pagination can be implemented to return results in smaller chunks (e.g., 10 or 20 items per page).
    - This can be achieved using Sequelize's limit and offset features.
-
-2. Soft Deletion with isDeleted Column:
-
-   - Instead of fully deleting records (questions, answers, comments), a soft deletion mechanism can be added by introducing an isDeleted boolean column in the database. This allows for a reversible deletion process and better data integrity.
 
 3. Search Functionality:
 
    - Adding a search feature would allow users to search for questions by keywords. This can be implemented using PostgreSQL full-text search or integrated with ElasticSearch for advanced search capabilities.
 
-4. User Profile Management:
+4. Soft Deletion with isDeleted Column:
 
-   - Currently, the user management system is minimal. Adding user profile pages with editable details (e.g., username, bio) could enhance the user experience.
+   - Instead of fully deleting records (questions, answers, comments), a soft deletion mechanism can be added by introducing an isDeleted boolean column in the database. This allows for a reversible deletion process and better data integrity.
 
 5. Role-Based Access Control (RBAC):
 
