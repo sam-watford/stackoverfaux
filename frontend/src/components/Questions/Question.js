@@ -30,7 +30,10 @@ const Question = () => {
 
   const handleAnswerSubmit = async (e) => {
     e.preventDefault();
-    await postAnswer({ body: answerBody, questionId: id });
+    const response = await postAnswer({ body: answerBody, questionId: id });
+    const answer = response.data;
+    answer.userName = localStorage.getItem("user");
+    setQuestion({ ...question, answers: [...question.answers, answer] });
     setAnswerBody("");
   };
 

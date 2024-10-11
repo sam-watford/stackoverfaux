@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getComments, postComment } from "../services/api";
+import { getComments } from "../services/api";
 import {
   List,
   ListItem,
   Typography,
-  TextField,
   Button,
   Box,
   Collapse,
@@ -12,10 +11,10 @@ import {
 } from "@mui/material";
 import parse from "html-react-parser";
 import Commentor from "./Commentor";
+import CommentAddForm from "./CommentAddForm";
 
 const CommentList = ({ comments, questionId, answerId }) => {
-  const [commentBody, setCommentBody] = useState("");
-  const [expanded, setExpanded] = useState(!!comments);
+  const [expanded, setExpanded] = useState(false);
   const [commentArray, setCommentArray] = useState(comments);
 
   useEffect(() => {
@@ -32,20 +31,6 @@ const CommentList = ({ comments, questionId, answerId }) => {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
-  };
-
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    const response = await postComment({
-      body: commentBody,
-      questionId,
-      answerId,
-    });
-    const comment = response.data;
-    setCommentBody("");
-    console.log(comment);
-    comment["userName"] = localStorage.getItem("user");
-    setCommentArray([...commentArray, comment]);
   };
 
   return (
@@ -88,29 +73,28 @@ const CommentList = ({ comments, questionId, answerId }) => {
                 </ListItem>
               ))}
             </List>
-            <form onSubmit={handleCommentSubmit} style={{ padding: "15px" }}>
-              <TextField
-                fullWidth
-                multiline
-                rows={2}
-                value={commentBody}
-                onChange={(e) => setCommentBody(e.target.value)}
-                placeholder="Write your comment"
-                variant="outlined"
-                sx={{ mb: 2 }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={!localStorage.getItem("user")}
-              >
-                Add Comment
-              </Button>
-            </form>
+            <CommentAddForm
+              answerId={answerId}
+              questionId={questionId}
+              commentArray={commentArray}
+              setCommentArray={setCommentArray}
+            />
           </Collapse>
         </>
       ) : (
-        <Button disabled>No comments yet.</Button>
+        <>
+          <Button onClick={handleExpandClick}>
+            {expanded ? "▲" : "▼"} No comments yet.
+          </Button>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CommentAddForm
+              answerId={answerId}
+              questionId={questionId}
+              commentArray={commentArray}
+              setCommentArray={setCommentArray}
+            />
+          </Collapse>
+        </>
       )}
     </Box>
   );
