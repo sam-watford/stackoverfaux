@@ -14,6 +14,7 @@ REST Api
   - [Register a new user](#Register-a-new-user)
 - [Comments](#Comments)
   - [Add a new comment](#Add-a-new-comment)
+  - [Get comments associated with a question or answer](#Get-comments-associated-with-a-question-or-answer)
 - [Questions](#Questions)
   - [Create a new question](#Create-a-new-question)
   - [Retrieve a specific question](#Retrieve-a-specific-question)
@@ -239,6 +240,41 @@ POST /comments
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
 | error | `String` | <p>Server error while creating the comment.</p> |
+
+## <a name='Get-comments-associated-with-a-question-or-answer'></a> Get comments associated with a question or answer
+[Back to top](#top)
+
+```
+GET /comments
+```
+
+### Parameters - `Parameter`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| questionId | `Number` | **optional** <p>Question ID (optional if comments are for a question).</p> |
+| answerId | `Number` | **optional** <p>Answer ID (optional if comments are for an answer).</p> |
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| comments | `Object[]` | <p>List of comments.</p> |
+
+### Error response
+
+#### Error response - `400`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| message | `String` | <p>Either questionId or answerId is required.</p> |
+
+#### Error response - `500`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| error | `String` | <p>Server error while retrieving the comments.</p> |
 
 # <a name='Questions'></a> Questions
 

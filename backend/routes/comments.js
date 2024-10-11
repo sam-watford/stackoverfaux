@@ -1,5 +1,5 @@
 const express = require("express");
-const { Comment } = require("../models");
+const { Comment, User } = require("../models");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
@@ -37,6 +37,57 @@ router.post("/", auth, async (req, res) => {
     res.status(201).json(comment);
   } catch (err) {
     res.status(500).json({ error: "Server error while creating the comment." });
+  }
+});
+
+/**
+ * @api {get} /comments Get comments associated with a question or answer
+ * @apiName GetComments
+ * @apiGroup Comments
+ * @apiParam {Number} [questionId] Question ID (optional if comments are for a question).
+ * @apiParam {Number} [answerId] Answer ID (optional if comments are for an answer).
+ * @apiSuccess {Object[]} comments List of comments.
+ * @apiError (400) {String} message Either questionId or answerId is required.
+ * @apiError (500) {String} error Server error while retrieving the comments.
+ */
+router.get("/", async (req, res) => {
+  try {
+    const { questionId, answerId } = req.query;
+
+    if (!questionId && !answerId) {
+      return res.status(400).json({
+        message: "Either questionId or answerId is required.",
+      });
+    }
+
+    let comments;
+    if (questionId) {
+      comments = await Comment.findAll({
+        where: { question_id: questionId },
+        include: [{ model: User, attributes: ["name"] }],
+      });
+    } else if (answerId) {
+      comments = await Comment.findAll({
+        where: { answer_id: answerId },
+        include: [{ model: User, attributes: ["name"] }],
+      });
+    }
+
+    const commentsWithUserNames = comments.map((comment) => {
+      return {
+        id: comment.id,
+        body: comment.body,
+        userName: comment.User ? comment.User.name : "unknown", // Convert user_id to userName for the comment
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+      };
+    });
+
+    res.status(200).json(commentsWithUserNames);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Server error while retrieving the comments." });
   }
 });
 

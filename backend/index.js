@@ -1,5 +1,6 @@
 // backend/index.js
 const express = require("express");
+const cors = require("cors");
 const sequelize = require("./config/database");
 const dotenv = require("dotenv");
 
@@ -24,6 +25,9 @@ sequelize
   .catch((err) => {
     console.error("Error connecting to the database:", err);
   });
+
+// Enable CORS for all routes (you can customize this later)
+app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(express.json());
