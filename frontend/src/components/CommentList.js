@@ -91,7 +91,11 @@ const CommentList = ({ comments, questionId, answerId }) => {
                 variant="outlined"
                 sx={{ mb: 2 }}
               />
-              <Button type="submit" variant="contained">
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={!localStorage.getItem("user")}
+              >
                 Add Comment
               </Button>
             </form>

@@ -93,7 +93,12 @@ const Question = () => {
                 placeholder="Write your answer"
                 variant="outlined"
               />
-              <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 2 }}
+                disabled={!localStorage.getItem("user")}
+              >
                 Post Your Answer
               </Button>
             </form>

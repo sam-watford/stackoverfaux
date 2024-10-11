@@ -15,12 +15,17 @@ const Auth = ({ setUser }) => {
       const response = isLogin
         ? await loginUser({ name })
         : await registerUser({ name });
-      const userData = response.data.token; // Save JWT token
+      const token = response.data.token;
+      localStorage.setItem("token", token);
       localStorage.setItem("user", name);
       setUser(name);
       navigate("/");
     } catch (err) {
-      setError("Authentication failed");
+      setError(
+        err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          "Authentication failed!"
+      );
     }
   };
 

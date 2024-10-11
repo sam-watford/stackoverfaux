@@ -62,14 +62,19 @@ router.post("/login", async (req, res) => {
 
     // Check if user exists
     const user = await User.findOne({ where: { name } });
+
     if (!user) {
       return res.status(400).json({ message: "Invalid username." });
     }
 
+    // Extract user data without Sequelize metadata
+    const userData = user.get({ plain: true }); // This converts to a plain JS object
+
     // Generate JWT token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: userData.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
+
     res.status(200).json({ token });
   } catch (err) {
     res.status(500).json({ error: "Server error while logging in." });
