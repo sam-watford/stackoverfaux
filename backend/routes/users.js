@@ -2,7 +2,15 @@ const express = require("express");
 const { User } = require("../models");
 const router = express.Router();
 
-// GET /users: Retrieve the list of all users
+/**
+ * @api {get} /users Retrieve all users
+ * @apiName GetUsers
+ * @apiGroup Users
+ * @apiSuccess {Object[]} users List of users.
+ * @apiSuccess {Number} users.id User id.
+ * @apiSuccess {String} users.name Username.
+ * @apiError (500) {String} error Server error while retrieving users.
+ */
 router.get("/", async (req, res) => {
   try {
     const users = await User.findAll({
@@ -14,7 +22,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /users/:id: Retrieve a specific user by id
+/**
+ * @api {get} /users/:id Retrieve a specific user by id
+ * @apiName GetUserById
+ * @apiGroup Users
+ * @apiParam {Number} id User's unique ID.
+ * @apiSuccess {Number} id User id.
+ * @apiSuccess {String} name Username.
+ * @apiError (404) {String} message User not found.
+ * @apiError (500) {String} error Server error while retrieving the user.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id, {

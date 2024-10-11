@@ -1,9 +1,19 @@
 const express = require("express");
 const { Question, Answer, Comment, User } = require("../models");
-const auth = require("../middleware/auth"); // Assuming authentication middleware is used to verify users
+const auth = require("../middleware/auth");
 const router = express.Router();
 
-// GET /questions: Retrieve all questions with count of answers, comments, and user's name
+/**
+ * @api {get} /questions Retrieve all questions
+ * @apiName GetQuestions
+ * @apiGroup Questions
+ * @apiSuccess {Object[]} questions List of questions.
+ * @apiSuccess {Number} questions.id Question id.
+ * @apiSuccess {String} questions.title Question title.
+ * @apiSuccess {String} questions.body Question body.
+ * @apiSuccess {Number} questions.score Question score.
+ * @apiError (500) {String} error Server error while retrieving questions.
+ */
 router.get("/", async (req, res) => {
   try {
     const questions = await Question.findAll({
@@ -49,7 +59,20 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /questions: Create a new question (protected route, requires authentication)
+/**
+ * @api {post} /questions Create a new question
+ * @apiName PostQuestion
+ * @apiGroup Questions
+ * @apiParam {String} title Question title.
+ * @apiParam {String} body Question body.
+ * @apiSuccess {Object} question Newly created question.
+ * @apiSuccess {Number} question.id Question id.
+ * @apiSuccess {String} question.title Question title.
+ * @apiSuccess {String} question.body Question body.
+ * @apiSuccess {Number} question.score Question score.
+ * @apiError (400) {String} message Title and body are required.
+ * @apiError (500) {String} error Server error while creating the question.
+ */
 router.post("/", auth, async (req, res) => {
   try {
     const { title, body, score = 0 } = req.body;
@@ -58,7 +81,7 @@ router.post("/", auth, async (req, res) => {
       return res.status(400).json({ message: "Title and body are required." });
     }
 
-    const userId = req.user.id; // Assuming auth middleware adds the user ID to the request
+    const userId = req.user.id;
 
     const newQuestion = await Question.create({
       title,
@@ -78,7 +101,18 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// GET /questions/:id: Retrieve a specific question with answers, convert user_id to userName, and count comments on each answer and question
+/**
+ * @api {get} /questions/:id Retrieve a specific question
+ * @apiName GetQuestionById
+ * @apiGroup Questions
+ * @apiParam {Number} id Question's unique ID.
+ * @apiSuccess {Number} id Question id.
+ * @apiSuccess {String} title Question title.
+ * @apiSuccess {String} body Question body.
+ * @apiSuccess {String} userName The name of the user who posted the question.
+ * @apiError (404) {String} message Question not found.
+ * @apiError (500) {String} error Server error while retrieving the question.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const question = await Question.findByPk(req.params.id, {
@@ -102,7 +136,6 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Question not found." });
     }
 
-    // Map the answers and add the correct comment count and userName for each answer
     const answersWithCounts = question.Answers.map((answer) => {
       return {
         id: answer.id,
@@ -117,7 +150,6 @@ router.get("/:id", async (req, res) => {
       };
     });
 
-    // Map the comments on the question and include userName instead of user_id
     const commentsWithUserNames = question.Comments.map((comment) => {
       return {
         id: comment.id,
@@ -128,7 +160,6 @@ router.get("/:id", async (req, res) => {
       };
     });
 
-    // Convert the question user_id to userName and add the modified answers and comments
     const questionWithDetails = {
       id: question.id,
       title: question.title,

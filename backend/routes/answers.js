@@ -3,7 +3,16 @@ const { Answer, Comment, User } = require("../models");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
-// GET /answers/:id: Retrieve a specific answer with comments, converting user_id to userName
+/**
+ * @api {get} /answers/:id Retrieve a specific answer with comments
+ * @apiName GetAnswerById
+ * @apiGroup Answers
+ * @apiParam {Number} id Answer's unique ID.
+ * @apiSuccess {Object} answer Answer object.
+ * @apiSuccess {String} answer.userName The name of the user who posted the answer.
+ * @apiError (404) {String} message Answer not found.
+ * @apiError (500) {String} error Server error while retrieving the answer.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const answer = await Answer.findByPk(req.params.id, {
@@ -52,7 +61,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /answers: Add a new answer (protected)
+/**
+ * @api {post} /answers Add a new answer
+ * @apiName PostAnswer
+ * @apiGroup Answers
+ * @apiParam {String} body Answer body.
+ * @apiParam {Number} questionId Question ID that the answer belongs to.
+ * @apiSuccess {Object} answer Newly created answer.
+ * @apiError (400) {String} message Body and questionId are required.
+ * @apiError (500) {String} error Server error while creating the answer.
+ */
 router.post("/", auth, async (req, res) => {
   try {
     const { body, questionId } = req.body;
@@ -76,7 +94,15 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// DELETE /answers/:id: Delete a specific answer (protected, only creator can delete)
+/**
+ * @api {delete} /answers/:id Delete an answer
+ * @apiName DeleteAnswer
+ * @apiGroup Answers
+ * @apiParam {Number} id Answer's unique ID.
+ * @apiError (403) {String} message You are not authorized to delete this answer.
+ * @apiError (404) {String} message Answer not found.
+ * @apiError (500) {String} error Server error while deleting the answer.
+ */
 router.delete("/:id", auth, async (req, res) => {
   try {
     const answer = await Answer.findByPk(req.params.id);

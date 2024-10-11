@@ -3,7 +3,15 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 const router = express.Router();
 
-// POST /auth/register: Register a new user (username only)
+/**
+ * @api {post} /auth/register Register a new user
+ * @apiName RegisterUser
+ * @apiGroup Auth
+ * @apiParam {String} name Username.
+ * @apiSuccess {String} token JWT token for the user.
+ * @apiError (400) {String} message User already exists.
+ * @apiError (500) {String} error Server error while registering user.
+ */
 router.post("/register", async (req, res) => {
   try {
     const { name } = req.body;
@@ -35,7 +43,15 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// POST /auth/login: Log in with username (no password)
+/**
+ * @api {post} /auth/login Log in with username
+ * @apiName LoginUser
+ * @apiGroup Auth
+ * @apiParam {String} name Username.
+ * @apiSuccess {String} token JWT token for the user.
+ * @apiError (400) {String} message Invalid username.
+ * @apiError (500) {String} error Server error while logging in.
+ */
 router.post("/login", async (req, res) => {
   try {
     const { name } = req.body;
