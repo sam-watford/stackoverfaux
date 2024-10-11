@@ -1,31 +1,103 @@
-# Sayari Full Stack Developer Code Challenge
+# Stackoverfaux: Full Stack Developer Code Challenge
 
-The accompanying dataset models a simple version of a Stack Overflow-like site. We would like for you to model some part of an application using this data, including a database layer, an API, and optionally a front end client. Your code will be evaluated based on the quality of the solution, not the completeness, so feel free to focus your efforts on areas you find interesting or which effectively demonstrate your skill set. Love performance tuning Postgres? Go for it. Have opinionated ideas about API design? Be sure to include them. Enjoy cloud platform management or container orchestration (we use Kubernetes)? Include an example config. Have a different database of choice you think would be appropriate for the challenge? Use it.
+This project models a simple version of a Stack Overflow-like site. It includes a **PostgreSQL** database layer, a **Node.js**/**Express** API, and a frontend client built with **React**. The application demonstrates core features such as displaying questions and answers, adding new content, and managing users.
 
-Like all projects, parts of this should be interesting, with ample room for creativity, and parts will be rote or boring. Feel free to cut corners on the latter, so you can invest more time in the former. If you do cut corners, though, make a note of it and explain what you would have done, had this been a production application.
+The main focus is on:
 
-The main requirements:
+- Data modeling with PostgreSQL.
+- API design with REST principles.
+- User authentication with **JWT** (JSON Web Tokens).
+- Frontend interactions built with React and **Material-UI**.
 
-- Think hard about data modeling. How should this data be modeled effectively in a database? How should it be exposed in an API? Pay special attention to data normalization.
-- Our tech stack leans hard on Typescript, React, Redux, and Postgres, and to a lesser extent ElasticSearch. To the extent you feel comfortable doing so, use these technologies in your solution.
-- Consider including functionality in line with any of the following: show questions and answers for a specific user; for a single question show all answers; add a new answer to an existing question; delete a user and all their questions/answers/comments; .... There are a lot of possibilities here. Again, no need to implement all of them. Choose the functionality you find most technically interesting or that best illustrates your data modeling design choices.
-- Document your development process and decision making, either via comments in the code, via a README file, or both.
-- It should be easy to run with minimal setup. Docker or Docker Compose can be useful here. Avoid building a solution that can't be easily ported from your computer to ours.
-- Give us enough code to make you look good. The solution should include a database and API and optionally a graphical interface, but the possibilities don't need to end there. If you have more you think would be interesting to share--like a test suite, or a deployment config, or monitoring tools--go for it.
+---
 
-On submission, we will set up a time with you to perform a code review and discuss what the next steps would be if this were a production application. None of these questions have right answers, just be prepared to convince us of the merits of your specific decisions.
+## Table of Contents
 
-## Setup
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Repository](#clone-the-repository)
+  - [Environment Setup](#environment-setup)
+  - [Running Migrations](#running-migrations)
+  - [Seeding the Database](#seeding-the-database)
+  - [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+- [Enhancements & Future Improvements](#enhancements--future-improvements)
 
-3. **Configure Environment Variables**
+---
 
-   Copy the `.env.example` file to create a `.env` file in the `backend/config/` directory:
+## Features
+
+- View all questions and their corresponding answers and comments.
+- Create new questions, answers, and comments.
+- Delete answers by the creator.
+- Authentication with **JWT**, including **login** and **registration**.
+- Backend services containerized with **Docker** for easy setup and deployment.
+- Scalable data modeling to support future features.
+
+---
+
+## Tech Stack
+
+- **Backend**:
+
+  - Node.js
+  - Express.js
+  - Sequelize ORM
+  - PostgreSQL
+  - JWT Authentication
+
+- **Frontend**:
+
+  - React
+  - Material-UI
+
+- **Containerization**:
+  - Docker
+  - Docker Compose
+
+---
+
+## Installation
+
+1. Prerequisites
+
+   - **Docker** and **Docker Compose** must be installed and running.
+   - **Git** for cloning the repository.
+
+2. Clone the Repository
+
+   To start, clone the repository to your local machine using the following command:
+
+   ```bash
+   git clone https://github.com/sam-watford/stackoverfaux.git
+   ```
+
+   or use SSH:
+
+   ```bash
+   git clone git@github.com:sam-watford/stackoverfaux.git
+   ```
+
+3. Navigate into the project directory:
+
+   ```
+   cd stackoverfaux
+   ```
+
+4. Environment Setup
+
+   Create a `.env` file in the `backend/config/` directory by copying the provided `.env.example`:
 
    ```
    cp backend/config/.env.example backend/config/.env
    ```
 
-4. **Running migrations**
+   Modify the `.env` file as necessary to reflect your local setup (for example, setting up PostgreSQL credentials, JWT_SECRET, etc.).
+
+5. Running Migrations
 
    To apply the database schema and create the necessary tables using Sequelize migrations, run the following command inside the Docker container:
 
@@ -35,12 +107,61 @@ On submission, we will set up a time with you to perform a code review and discu
 
    This will execute the migrations and set up the tables in the PostgreSQL database.
 
-5. **Seeding the Database**
+6. Seeding the Database
 
-   To seed the database with the initial data, run the following command:
+   To populate the database with initial data (questions, answers, comments, and users), run the following seed command:
 
    ```
    docker-compose exec backend npx sequelize-cli db:seed:all
    ```
 
    This will insert the data into the `users`, `questions`, `answers`, and `comments` tables.
+
+## Running the Application
+
+Once the environment is set up, you can start the application using Docker Compose. This will launch the backend, frontend, and database services.
+
+- Build and run the Docker containers:
+
+  ```
+  docker-compose up --build
+  ```
+
+- Access the application:
+
+  - Frontend: Navigate to http://localhost:3000 to view the React frontend.
+  - Backend API: The API will be available at http://localhost:5000.
+
+## API Documentation
+
+- The complete API documentation, including endpoints and their details, is available in the `backend/documentation.md` file.
+  Please refer to this file for a detailed overview of the API design, request/response formats, and error handling.
+
+## Enhancements & Future Improvements
+
+Here are some potential areas for improvement and future enhancements:
+
+1. Pagination for Efficiency:
+
+   - Currently, the API returns all results (questions, answers, comments) in one go, which can be inefficient for large datasets. Pagination can be implemented to return results in smaller chunks (e.g., 10 or 20 items per page).
+   - This can be achieved using Sequelize's limit and offset features.
+
+2. Soft Deletion with isDeleted Column:
+
+   - Instead of fully deleting records (questions, answers, comments), a soft deletion mechanism can be added by introducing an isDeleted boolean column in the database. This allows for a reversible deletion process and better data integrity.
+
+3. Search Functionality:
+
+   - Adding a search feature would allow users to search for questions by keywords. This can be implemented using PostgreSQL full-text search or integrated with ElasticSearch for advanced search capabilities.
+
+4. User Profile Management:
+
+   - Currently, the user management system is minimal. Adding user profile pages with editable details (e.g., username, bio) could enhance the user experience.
+
+5. Role-Based Access Control (RBAC):
+
+   - Introducing different user roles (e.g., admin, moderator) would allow better management of content and privileges within the system.
+
+6. Testing:
+
+   - Adding unit and integration tests for the API endpoints and core business logic would improve reliability and maintainability.
