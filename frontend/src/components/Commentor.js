@@ -7,7 +7,10 @@ const Commentor = ({ type, comment }) => {
     return <></>;
   }
 
-  const { userName, creation } = comment;
+  const { userName, creation, createdAt } = comment;
+
+  const timestamp =
+    type === "question" || type === "answer" ? creation : createdAt;
 
   return (
     <Box
@@ -23,17 +26,21 @@ const Commentor = ({ type, comment }) => {
       {userName && (
         <p>
           <strong>{userName}</strong>{" "}
-          {type === "question" ? "asked" : type === "answer" ? "answered" : ""}
+          {type === "question"
+            ? "asked"
+            : type === "answer"
+            ? "answered"
+            : "commented"}
         </p>
       )}
-      {creation && (
+      {timestamp && (
         <p
           style={{
             cursor: "pointer",
           }}
-          title={new Date(creation).toISOString()}
+          title={new Date(timestamp).toISOString()}
         >
-          {formatDistanceToNow(new Date(creation), { addSuffix: true })}
+          {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
         </p>
       )}
     </Box>

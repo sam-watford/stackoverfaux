@@ -36,8 +36,16 @@ const CommentList = ({ comments, questionId, answerId }) => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    await postComment({ body: commentBody, questionId, answerId });
+    const response = await postComment({
+      body: commentBody,
+      questionId,
+      answerId,
+    });
+    const comment = response.data;
     setCommentBody("");
+    console.log(comment);
+    comment["userName"] = localStorage.getItem("user");
+    setCommentArray([comment, ...commentArray]);
   };
 
   return (
@@ -70,7 +78,7 @@ const CommentList = ({ comments, questionId, answerId }) => {
                     </Box>
                     <Box
                       sx={{
-                        width: "150px",
+                        width: "250px",
                         ml: 2,
                       }}
                     >

@@ -8,8 +8,11 @@ module.exports = function (req, res, next) {
       .json({ message: "Access Denied. No token provided." });
   }
 
+  // Ensure token follows the Bearer format
+  const bearerToken = token.split(" ")[1];
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET);
     req.user = decoded; // Attach the decoded user (userId) to the request
     next();
   } catch (err) {

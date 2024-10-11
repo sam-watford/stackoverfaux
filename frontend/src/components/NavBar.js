@@ -25,6 +25,7 @@ const NavBar = ({ user, setUser }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
     handleProfileClose();
     navigate("/");

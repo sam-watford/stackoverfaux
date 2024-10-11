@@ -65,11 +65,13 @@ router.get("/", async (req, res) => {
       comments = await Comment.findAll({
         where: { question_id: questionId },
         include: [{ model: User, attributes: ["name"] }],
+        order: [["createdAt", "DESC"]],
       });
     } else if (answerId) {
       comments = await Comment.findAll({
         where: { answer_id: answerId },
         include: [{ model: User, attributes: ["name"] }],
+        order: [["createdAt", "DESC"]],
       });
     }
 
