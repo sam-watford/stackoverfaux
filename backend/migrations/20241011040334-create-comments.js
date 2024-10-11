@@ -13,14 +13,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      score: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-      },
-      creation: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-      },
       user_id: {
         type: Sequelize.INTEGER,
         references: {

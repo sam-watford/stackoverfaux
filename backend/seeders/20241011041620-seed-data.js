@@ -9,99 +9,115 @@ const data = JSON.parse(
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const usersMap = new Map();
-    const questionsMap = new Map();
     const users = [];
 
-    // Seed Users
     data.forEach((question) => {
       const questionUser = question.user;
-      if (!usersMap.has(questionUser.id)) {
+      if (!users.some((user) => user.id === questionUser.id)) {
         users.push({
+          id: questionUser.id,
           name: questionUser.name,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
-        usersMap.set(questionUser.id, users.length); // Map old user id to new user id
       }
 
       question.comments.forEach((comment) => {
         const commentUser = comment.user;
-        if (!usersMap.has(commentUser.id)) {
+        if (!users.some((user) => user.id === commentUser.id)) {
           users.push({
+            id: commentUser.id,
             name: commentUser.name,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
-          usersMap.set(commentUser.id, users.length); // Map old user id to new user id
         }
       });
 
       question.answers.forEach((answer) => {
         const answerUser = answer.user;
-        if (!usersMap.has(answerUser.id)) {
+        if (!users.some((user) => user.id === answerUser.id)) {
           users.push({
+            id: answerUser.id,
             name: answerUser.name,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
-          usersMap.set(answerUser.id, users.length); // Map old user id to new user id
         }
+
+        answer.comments.forEach((comment) => {
+          const commentUser = comment.user;
+          if (!users.some((user) => user.id === commentUser.id)) {
+            users.push({
+              id: commentUser.id,
+              name: commentUser.name,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            });
+          }
+        });
       });
     });
 
     await queryInterface.bulkInsert("users", users);
 
-    // Seed Questions and store mappings of old to new question IDs
-    for (const question of data) {
-      const result = await queryInterface.bulkInsert(
-        "questions",
-        [
-          {
-            title: question.title,
-            body: question.body,
-            score: question.score,
-            creation: new Date(question.creation * 1000), // Convert UNIX timestamp
-            user_id: usersMap.get(question.user.id), // Use mapped user ID
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-        ],
-        { returning: ["id"] }
-      );
-      questionsMap.set(question.id, result[0].id); // Map old question ID to new question ID
-    }
+    const questions = data.map((question) => ({
+      id: question.id,
+      title: question.title,
+      body: question.body,
+      score: question.score,
+      creation: new Date(question.creation * 1000), // Convert UNIX timestamp
+      user_id: question.user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+    await queryInterface.bulkInsert("questions", questions);
 
-    // Seed Answers
     const answers = [];
-    for (const question of data) {
+    data.forEach((question) => {
       question.answers.forEach((answer) => {
         answers.push({
+          id: answer.id,
           body: answer.body,
           score: answer.score,
           creation: new Date(answer.creation * 1000), // Convert UNIX timestamp
-          question_id: questionsMap.get(question.id), // Use mapped question ID
-          user_id: usersMap.get(answer.user.id), // Use mapped user ID
+          question_id: answer.question_id || question.id,
+          user_id: answer.user.id,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
       });
-    }
+    });
     await queryInterface.bulkInsert("answers", answers);
 
-    // Seed Comments
     const comments = [];
-    for (const question of data) {
+    data.forEach((question) => {
       question.comments.forEach((comment) => {
         comments.push({
+          id: comment.id,
           body: comment.body,
-          user_id: usersMap.get(comment.user.id), // Use mapped user ID
-          question_id: questionsMap.get(question.id), // Use mapped question ID
+          user_id: comment.user.id,
+          question_id: comment.question_id || question.id,
+          answer_id: null, // Comment is associated with a question, not an answer
           createdAt: new Date(),
           updatedAt: new Date(),
         });
       });
-    }
+
+      question.answers.forEach((answer) => {
+        answer.comments.forEach((comment) => {
+          comments.push({
+            id: comment.id,
+            body: comment.body,
+            user_id: comment.user.id,
+            question_id: null, // Comment is associated with an answer, not a question
+            answer_id: answer.id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        });
+      });
+    });
     await queryInterface.bulkInsert("comments", comments);
   },
 

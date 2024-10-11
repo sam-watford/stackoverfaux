@@ -7,16 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      score: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-      creation: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
     },
-    {}
+    {
+      tableName: "comments",
+    }
   );
 
   // Define associations

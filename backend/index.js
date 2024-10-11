@@ -3,6 +3,12 @@ const express = require("express");
 const sequelize = require("./config/database");
 const dotenv = require("dotenv");
 
+const questionsRouter = require("./routes/questions");
+const usersRouter = require("./routes/users");
+const commentsRouter = require("./routes/comments");
+const answersRouter = require("./routes/answers");
+const authRouter = require("./routes/auth");
+
 // Load environment variables from .env file
 dotenv.config({ path: "./config/.env" });
 
@@ -26,6 +32,13 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello from the backend!");
 });
+
+// Routes
+app.use("/questions", questionsRouter);
+app.use("/users", usersRouter);
+app.use("/comments", commentsRouter);
+app.use("/answers", answersRouter);
+app.use("/auth", authRouter);
 
 // Sync database models with better logging and error handling
 sequelize

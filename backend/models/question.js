@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.NOW,
       },
     },
-    {}
+    {
+      tableName: "questions",
+    }
   );
 
   // Define associations
