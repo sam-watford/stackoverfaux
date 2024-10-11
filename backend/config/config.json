@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "password",
+    "database": "stackoverfaux-db",
+    "host": "db",
+    "dialect": "postgres"
+  }
+}

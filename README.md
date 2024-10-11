@@ -17,7 +17,20 @@ On submission, we will set up a time with you to perform a code review and discu
 
 ## Setup
 
-- Create a .env file by copying the .env.example file:
-  ```
-  cp backend/config/.env.example backend/config/.env
-  ```
+3. **Configure Environment Variables:**
+
+   Copy the `.env.example` file to create a `.env` file in the `backend/config/` directory:
+
+   ```
+   cp backend/config/.env.example backend/config/.env
+   ```
+
+4. **Running migrations:**
+
+   To apply the database schema and create the necessary tables using Sequelize migrations, run the following command inside the Docker container:
+
+   ```
+   docker-compose exec backend npx sequelize-cli db:migrate
+   ```
+
+   This will execute the migrations and set up the tables in the PostgreSQL database.

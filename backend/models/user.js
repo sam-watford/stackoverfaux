@@ -1,16 +1,28 @@
-// backend/models/user.js
-const { DataTypes } = require("sequelize");
-const sequelize = require("../index").sequelize;
+"use strict";
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    "User",
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {}
+  );
 
-const User = sequelize.define("User", {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
+  // Define associations
+  User.associate = function (models) {
+    User.hasMany(models.Question, {
+      foreignKey: "user_id",
+      onDelete: "CASCADE",
+    });
+    User.hasMany(models.Answer, { foreignKey: "user_id", onDelete: "CASCADE" });
+    User.hasMany(models.Comment, {
+      foreignKey: "user_id",
+      onDelete: "CASCADE",
+    });
+  };
 
-module.exports = User;
+  return User;
+};
