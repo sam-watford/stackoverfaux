@@ -84,7 +84,7 @@ const CommentList = ({ comments, questionId, answerId }) => {
       ) : (
         <>
           <Button onClick={handleExpandClick}>
-            {expanded ? "▲" : "▼"} No comments yet.
+            {expanded ? "▲" : "▼"} No comments yet
           </Button>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CommentAddForm
