@@ -17,7 +17,7 @@ On submission, we will set up a time with you to perform a code review and discu
 
 ## Setup
 
-3. **Configure Environment Variables:**
+3. **Configure Environment Variables**
 
    Copy the `.env.example` file to create a `.env` file in the `backend/config/` directory:
 
@@ -25,7 +25,7 @@ On submission, we will set up a time with you to perform a code review and discu
    cp backend/config/.env.example backend/config/.env
    ```
 
-4. **Running migrations:**
+4. **Running migrations**
 
    To apply the database schema and create the necessary tables using Sequelize migrations, run the following command inside the Docker container:
 
@@ -34,3 +34,13 @@ On submission, we will set up a time with you to perform a code review and discu
    ```
 
    This will execute the migrations and set up the tables in the PostgreSQL database.
+
+5. **Seeding the Database**
+
+   To seed the database with the initial data, run the following command:
+
+   ```
+   docker-compose exec backend npx sequelize-cli db:seed:all
+   ```
+
+   This will insert the data into the `users`, `questions`, `answers`, and `comments` tables.
