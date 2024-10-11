@@ -45,7 +45,7 @@ const CommentList = ({ comments, questionId, answerId }) => {
     setCommentBody("");
     console.log(comment);
     comment["userName"] = localStorage.getItem("user");
-    setCommentArray([comment, ...commentArray]);
+    setCommentArray([...commentArray, comment]);
   };
 
   return (

@@ -76,7 +76,10 @@ const Question = () => {
             ))}
             <Divider sx={{ my: 4 }} />
 
-            <CommentList comments={question.comments} />
+            <CommentList
+              comments={question.comments}
+              questionId={question.id}
+            />
 
             <Divider sx={{ my: 4 }} />
 
