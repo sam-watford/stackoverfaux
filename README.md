@@ -14,3 +14,10 @@ The main requirements:
 - Give us enough code to make you look good. The solution should include a database and API and optionally a graphical interface, but the possibilities don't need to end there. If you have more you think would be interesting to share--like a test suite, or a deployment config, or monitoring tools--go for it.
 
 On submission, we will set up a time with you to perform a code review and discuss what the next steps would be if this were a production application. None of these questions have right answers, just be prepared to convince us of the merits of your specific decisions.
+
+## Setup
+
+- Create a .env file by copying the .env.example file:
+  ```
+  cp backend/config/.env.example backend/config/.env
+  ```
