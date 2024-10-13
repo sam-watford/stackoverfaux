@@ -26,16 +26,12 @@ services:
         condition: service_healthy
     env_file:
       - ./backend/config/.env
-    volumes:
-      - ./backend:/app
     command: npm run dev
 
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
     command: npm start
 
 volumes:
