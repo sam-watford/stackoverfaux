@@ -16,13 +16,13 @@ The main focus is on:
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
+  - Prerequisites
+  - Clone the Repository
+  - Environment Setup
 - [Running the Application](#running-the-application)
-  - [Prerequisites](#prerequisites)
-  - [Clone the Repository](#clone-the-repository)
-  - [Environment Setup](#environment-setup)
-  - [Running Migrations](#running-migrations)
-  - [Seeding the Database](#seeding-the-database)
-  - [Running the Application](#running-the-application)
+  - Build and run docker containers
+  - Running Migrations
+  - Seeding the Database
 - [API Documentation](#api-documentation)
 - [Enhancements & Future Improvements](#enhancements--future-improvements)
 
@@ -69,25 +69,25 @@ The main focus is on:
 
 2. Clone the Repository
 
-   To start, clone the repository to your local machine using the following command:
+- To start, clone the repository to your local machine using the following command:
 
-   ```bash
-   git clone https://github.com/sam-watford/stackoverfaux.git
-   ```
+  ```bash
+  git clone https://github.com/sam-watford/stackoverfaux.git
+  ```
 
-   or use SSH:
+  or use SSH:
 
-   ```bash
-   git clone git@github.com:sam-watford/stackoverfaux.git
-   ```
+  ```bash
+  git clone git@github.com:sam-watford/stackoverfaux.git
+  ```
 
-3. Navigate into the project directory:
+- Navigate into the project directory:
 
-   ```
-   cd stackoverfaux
-   ```
+  ```
+  cd stackoverfaux
+  ```
 
-4. Environment Setup
+3. Environment Setup
 
    Create a `.env` file in the `backend/config/` directory by copying the provided `.env.example`:
 
@@ -97,7 +97,17 @@ The main focus is on:
 
    Modify the `.env` file as necessary to reflect your local setup (for example, setting up PostgreSQL credentials, JWT_SECRET, etc.).
 
-5. Running Migrations
+## Running the Application
+
+1. Build and run docker containers
+
+   Once the environment is set up, you can start the application using Docker Compose. This will launch the backend, frontend, and database services.
+
+   ```
+   docker-compose up --build
+   ```
+
+2. Running Migrations
 
    To apply the database schema and create the necessary tables using Sequelize migrations, run the following command inside the Docker container:
 
@@ -107,7 +117,7 @@ The main focus is on:
 
    This will execute the migrations and set up the tables in the PostgreSQL database.
 
-6. Seeding the Database
+3. Seeding the Database
 
    To populate the database with initial data (questions, answers, comments, and users), run the following seed command:
 
@@ -117,20 +127,10 @@ The main focus is on:
 
    This will insert the data into the `users`, `questions`, `answers`, and `comments` tables.
 
-## Running the Application
+4. Access the application:
 
-Once the environment is set up, you can start the application using Docker Compose. This will launch the backend, frontend, and database services.
-
-- Build and run the Docker containers:
-
-  ```
-  docker-compose up --build
-  ```
-
-- Access the application:
-
-  - Frontend: Navigate to http://localhost:3000 to view the React frontend.
-  - Backend API: The API will be available at http://localhost:5000.
+   - Frontend: Navigate to http://localhost:3000 to view the React frontend.
+   - Backend API: The API will be available at http://localhost:5000.
 
 ## API Documentation
 
